@@ -1,3 +1,9 @@
+/************************************************************/
+/*           Dylan Hoover	COEN 11 Lab #2                  */						 
+/*                24 September 2018                         */
+/* Creates a list that holds a name and a department number */                           
+/************************************************************/
+
 #include <stdlib.h>
 #include <stdio.h>
 #include <string.h>

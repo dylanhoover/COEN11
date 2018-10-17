@@ -1,3 +1,9 @@
+/*******************************************/
+/*     Dylan Hoover COEN 11 Lab#3          */
+/*          4 October 2018                 */
+/*  Creates a waiting list using structs   */
+/*******************************************/
+
 #include <stdlib.h>
 #include <stdio.h>
 #include <string.h>

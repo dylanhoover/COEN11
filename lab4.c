@@ -1,3 +1,9 @@
+/*******************************************************************************/
+/*                       Dylan Hoover COEN 11 Lab #4                           */
+/*                             11 October 2018                                 */
+/* Creates a waitng list using a struct with extra information kept in a union */
+/*******************************************************************************/
+
 #include <stdlib.h>
 #include <stdio.h>
 #include <string.h>

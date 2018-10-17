@@ -1,8 +1,8 @@
-/*****************************************/
-/* Dylan Hoover COEN 11 Lab #1           */
-/* This program creates a random number  */
-/* and uses it as a math test for 10 #'s */
-/*****************************************/
+/******************************************************************************/
+/*                         Dylan Hoover COEN 11 Lab #1                        */
+/*                               19 May 2018                                  */
+/* This program creates a random number and uses it as a math test for 10 #'s */
+/******************************************************************************/
 
 
 #include <stdio.h> 
