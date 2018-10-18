@@ -1,3 +1,9 @@
+/*********************************************/
+/*         Dylan Hoover COEN 11 Lab 5        */
+/*              18 October 2018              */
+/* Creates a wating list using a linked list */
+/*********************************************/
+
 #include <stdlib.h>
 #include <stdio.h>
 #include <string.h>
