@@ -32,7 +32,7 @@ struct things departments[4];
 struct node duh;
 
 //declare functions
-void insert();
+void insert(char* tempName, int tempDep, float fever, char* pain, int daySick);
 int checkDuplicate();
 void list();
 void delRow();
@@ -129,7 +129,8 @@ void readFile(char *file)
 				temp->additionalInfo.daySick = duh.additionalInfo.daySick;
 				break;
 		}
-		insert(temp);
+		insert(temp->name, temp->department, temp->additionalInfo.fever, temp->additionalInfo.pain, temp->additionalInfo.daySick);
+		printf("\n");
 	}
 	free(temp);
 	fclose(fp); //close the file
