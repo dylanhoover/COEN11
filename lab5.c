@@ -27,7 +27,7 @@ NODE *head = NULL;
 NODE *tail = NULL;
 
 //delcare functions
-void insert(); 
+void insert();
 void list();
 void delRow();
 int checkDuplicate();
@@ -66,7 +66,7 @@ int main (void)
 				break;
 			default:
 				printf("Error, you have selected a non-existant option.\n");
-			
+
 		}
 	}while(command !=0); //when 0 is pressed the do loop exits
 	return 0;
@@ -84,7 +84,7 @@ void insert()
 	int x,y;
 		do //this loop is to make sure when the names are the same the code doesn't continue to run
 		{
-			printf("What is your name?\n");		
+			printf("What is your name?\n");
 			scanf("%s",tempName); //pulls user input into temp array
 			int c = 0; //declare control int to continue code
 			z = checkDuplicate(tempName); //z control is set to the return of checkDuplicate
@@ -95,7 +95,7 @@ void insert()
 		}while(x == 0);
 		if(z == 1) //z is returned from the checkDuplicate
 		{
-			strcpy(temp->names,tempName); //copy the name in temp	
+			strcpy(temp->names,tempName); //copy the name in temp
 			do
 			{
 				printf("What Department are you in? 1, 2, 3 or 4?\n");
@@ -106,7 +106,7 @@ void insert()
 					temp->department = tempi; //sets department equal to the given department
 					temp->keep = tempi; //sets int keep for the union equal to the given department
 					/* These if statements depend on what department is being choosen */
-					if(temp->keep == 1) 
+					if(temp->keep == 1)
 					{
 						printf("What temperature is your fever?\n");
 						scanf("%f", &temp->additionalInfo.fever);
@@ -135,7 +135,7 @@ void insert()
 					y = 0;
 				}
 			}while(y == 0);
-		}	
+		}
 		//empty list
 		if(p == NULL)
 		{
@@ -162,7 +162,7 @@ int checkDuplicate(char temp[20])
 		{
 			printf("Name already in use choose a new one\n");
 			return 0; //when 0 is returned the insert function will ask for a new name
-		};
+		}
 		p = p->next;
 	}
 	return 1; //retruning 1 lets the insert function continue
@@ -200,22 +200,22 @@ void delRow()
 	p = q = head;
 	do
 	{
-		printf("Which department:  ");	
+		printf("Which department:  ");
 		scanf("%d",&cmd);
 		if(cmd == 1 || cmd == 2 || cmd == 3 || cmd == 4) //the cmd is the same as the department selection
 		{
 			while( p != NULL)
 			{
 				if(p->department == cmd) //if the department exists then the next for loop will run
-				{	
+				{
 					x = 1;
 					break;
 				}
-				
+
 				q = p;
 				p = p->next;
 			}
-			
+
 			x = 1; //allows for the do while loop to exit
 		}
 		else //if the correct department is not inserted
@@ -270,7 +270,7 @@ void showDepartment()
 					j = 1;
 				}
 				p = p->next;
-					
+
 			}
 				if( j == 0)//if j is not set equal to 1 by the previous loop then there are no names in the department
 				{
@@ -288,7 +288,7 @@ void showDepartment()
 		}
 	}while(x == 0);
 	return;
-}	
+}
 
 void showInfo()
 {
@@ -301,7 +301,7 @@ NODE *p;
 
  //temp name string to compare the name given with names in the list
 do
-{	
+{
 	p = head;
 	printf("What name would you like to see more information for?\n");
 	scanf("%s", tempName); //get name
@@ -316,7 +316,7 @@ do
 			switch(ctl)
 			{
 				case 1:
-					printf("%s has a %.2f degree fever.\n", tempName, p->additionalInfo.fever); 
+					printf("%s has a %.2f degree fever.\n", tempName, p->additionalInfo.fever);
 					printf("\n");
 					//return 0;
 					flag = 1;
@@ -340,10 +340,10 @@ do
 					flag = 1;
 					break;
 
-				}	
+				}
 		}
 		p = p->next;
-	}			
+	}
 	if(flag == 0)
 		printf("Name not in list\n");
 	else if(flag == 1)

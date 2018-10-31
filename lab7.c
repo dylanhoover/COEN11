@@ -1,3 +1,8 @@
+/***********************************************************************************************/
+/*															Dylan Hoover COEN 11 Lab 7                                     */
+/*																	                                   */
+/*	Stuct of linked lists that output to a file in binary, data can be read from a file aswell */
+/***********************************************************************************************/
 #include <stdlib.h>
 #include <stdio.h>
 #include <string.h>
@@ -24,10 +29,10 @@ struct things
 };
 
 struct things departments[4];
-
+struct node duh;
 
 //declare functions
-void insert(char* tempName, int tempDep,  float fever, char* pain, int daySick);
+void insert();
 int checkDuplicate();
 void list();
 void delRow();
@@ -97,30 +102,36 @@ void readFile(char *file)
 	char pain[20];
 	float fever;
 	int daySick;
-	fp = fopen(file, "r"); //set file pointer to open file
+  NODE *temp;
+  temp = (NODE *)malloc(sizeof(NODE));
+	fp = fopen(file, "rb"); //set file pointer to open file
 	if(fp == NULL) //if the file name does not exist
 	{
 		printf("Cannot open file.\n");
 		return;
 	}
-	fseek(fp, 24, SEEK_SET); //skips the header in the file
-	while(fscanf(fp,"%s %d", tempName, &tempDep) != EOF) //while the file does not reach the end of the file
+	while(fread(&duh, sizeof(NODE), 1, fp) == 1)
 	{
-		if(tempDep == 1)
+		strcpy(temp->name, duh.name);
+		temp->department = duh.department;
+		switch(duh.department)
 		{
-			fscanf(fp,"%f\n", &fever);
+			case 1:
+				temp->additionalInfo.fever = duh.additionalInfo.fever;
+				break;
+			case 2:
+				strcpy(temp->additionalInfo.pain, duh.additionalInfo.pain);
+				break;
+			case 3:
+				temp->additionalInfo.daySick = duh.additionalInfo.daySick;
+				break;
+			case 4:
+				temp->additionalInfo.daySick = duh.additionalInfo.daySick;
+				break;
 		}
-		else if(tempDep == 2)
-		{
-			fscanf(fp,"%s\n", pain);
-		}
-		else if(tempDep == 3 || tempDep == 4)
-		{
-			fscanf(fp,"%d\n", &daySick);
-		}
-		insert(tempName, tempDep, fever, pain, daySick);
+		insert(temp);
 	}
-
+	free(temp);
 	fclose(fp); //close the file
 	return;
 }
@@ -393,6 +404,7 @@ void showDepartment()
 	}
 	return;
 }
+
 void changeDepartment()
 {
 	int i;
@@ -477,7 +489,6 @@ void changeDepartment()
 		printf("Name not in list.\n");
 	}
 	}
-	free(p);
 	return;
 }
 
@@ -548,26 +559,13 @@ int saveFile(char *file)
 	NODE *p;
 	FILE *ofp; //file pointer
 	int i;
-	ofp = fopen(file, "w"); //set file pointer to file name specified
-	fprintf(ofp, "Names		Department	Issue\n");
+	ofp = fopen(file, "wb"); //set file pointer to file name specified
 	for(i = 0; i < 4; i++) //iterate through the array
 	{
 		p = departments[i].head; //set p to head
 		while(p != NULL)
 		{
-			/*Prints the lines to the file*/
-			if(p->department == 1)
-			{
-				fprintf(ofp, "%s		%d		%.02f\n", p->name, p->department,p->additionalInfo.fever);
-			}
-			else if(p->department == 2)
-			{
-				fprintf(ofp, "%s		%d		%s\n", p->name, p->department,p->additionalInfo.pain);
-			}
-			else if(p->department == 3 || p->department == 4)
-			{
-				fprintf(ofp, "%s		%d		%d\n", p->name, p->department,p->additionalInfo.daySick);
-			}
+			fwrite(p, sizeof(NODE), 1, ofp);
 			p = p->next;
 		}
 	}
