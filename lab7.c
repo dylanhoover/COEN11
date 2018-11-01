@@ -1,8 +1,8 @@
-/***********************************************************************************************/
-/*															Dylan Hoover COEN 11 Lab 7                                     */
-/*																	                                   */
-/*	Stuct of linked lists that output to a file in binary, data can be read from a file aswell */
-/***********************************************************************************************/
+/***************************************************************************************************/
+/*													  	Dylan Hoover COEN 11 Lab 7                                         */
+/*																			1 November 2018		                                         */
+/*	Stuct of linked lists that output to a file in binary, data can be read from a file aswell     */
+/***************************************************************************************************/
 #include <stdlib.h>
 #include <stdio.h>
 #include <string.h>
@@ -29,10 +29,9 @@ struct things
 };
 
 struct things departments[4];
-struct node duh;
 
 //declare functions
-void insert(char* tempName, int tempDep, float fever, char* pain, int daySick);
+void insert(char* tempName, int tempDep, union extra info);
 int checkDuplicate();
 void list();
 void delRow();
@@ -99,42 +98,36 @@ int main(int argc, char* argv[])
 void readFile(char *file)
 {
 	FILE *fp; //file pointer
+	struct node duh;
 	char tempName[20];
 	int tempDep;
-	char pain[20];
-	float fever;
-	int daySick;
-  NODE *temp;
-  temp = (NODE *)malloc(sizeof(NODE));
+	union extra info;
 	fp = fopen(file, "rb"); //set file pointer to open file
 	if(fp == NULL) //if the file name does not exist
 	{
-		printf("Cannot open file.\n");
+		printf("File does not exist.\n");
 		return;
 	}
 	while(fread(&duh, sizeof(NODE), 1, fp) == 1)
 	{
-		strcpy(temp->name, duh.name);
-		temp->department = duh.department;
+		strcpy(tempName, duh.name);
+		tempDep = duh.department;
 		switch(duh.department)
 		{
 			case 1:
-				temp->additionalInfo.fever = duh.additionalInfo.fever;
+				info.fever = duh.additionalInfo.fever;
 				break;
 			case 2:
-				strcpy(temp->additionalInfo.pain, duh.additionalInfo.pain);
+				strcpy(info.pain, duh.additionalInfo.pain);
 				break;
 			case 3:
-				temp->additionalInfo.daySick = duh.additionalInfo.daySick;
-				break;
 			case 4:
-				temp->additionalInfo.daySick = duh.additionalInfo.daySick;
+				info.daySick = duh.additionalInfo.daySick;
 				break;
 		}
-		insert(temp->name, temp->department, temp->additionalInfo.fever, temp->additionalInfo.pain, temp->additionalInfo.daySick);
-		printf("\n");
+		insert(tempName, tempDep, info);
+
 	}
-	free(temp);
 	fclose(fp); //close the file
 	return;
 }
@@ -143,12 +136,10 @@ void collectData() //collects user input data
 {
 	char tempName[20];
 	int tempDep;
-	float fever;
-	char pain[20];
-	int daySick;
 	int x = 0;
 	int y = 0;
 	int check = 0;
+	union extra info;
 	while(x != 1)
 	{
 		printf("What is your name?\n");
@@ -169,35 +160,35 @@ void collectData() //collects user input data
 			{
 				case 1:
 					printf("What temperature is your fever?\n");
-					scanf("%f", &fever);
+					scanf("%f", &info.fever);
 					y = 1;
 					break;
 				case 2:
 					printf("What kind of pain are you experiencing?\n");
-					scanf("%s", pain);
+					scanf("%s",info.pain);
 					y = 1;
 					break;
 				case 3:
 					printf("How many days have you been sick?\n");
-					scanf("%d", &daySick);
+					scanf("%d", &info.daySick);
 					y = 1;
 					break;
 				case 4:
 					printf("How many days have you been sick?\n");
-					scanf("%d", &daySick);
+					scanf("%d", &info.daySick);
 					y = 1;
 					break;
 				default:
 					printf("Not a department.\n");
 			}
 		}
-		insert(tempName, tempDep, fever, pain, daySick);
+		insert(tempName, tempDep, info);
 	}
 	return;
 }
 
 
-void insert(char* tempName, int tempDep, float fever, char* pain, int daySick)
+void insert(char* tempName, int tempDep, union extra info)
 {
 	/* All data is passed to insert, both from read file and collect data functions*/
 	int y;
@@ -213,7 +204,7 @@ void insert(char* tempName, int tempDep, float fever, char* pain, int daySick)
 					p = departments[0].head; //set p to the first array
 					q = departments[0].tail; //set q to the first array
 					temp->department = tempDep; //copies department to temp node
-					temp->additionalInfo.fever = fever; //copies additional info to temp node
+					temp->additionalInfo.fever = info.fever; //copies additional info to temp node
 					if(p == NULL) //if the linked list is empty
 					{
 						temp->next = NULL; //temp next is null
@@ -231,7 +222,7 @@ void insert(char* tempName, int tempDep, float fever, char* pain, int daySick)
 					p = departments[1].head;
 					q = departments[1].tail;
 					temp->department = tempDep;
-					strcpy(temp->additionalInfo.pain, pain);
+					strcpy(temp->additionalInfo.pain, info.pain);
 					if(p == NULL)
 					{
 						temp->next = NULL;
@@ -249,7 +240,7 @@ void insert(char* tempName, int tempDep, float fever, char* pain, int daySick)
 					p = departments[2].head;
 					q = departments[2].tail;
 					temp->department = tempDep;
-					temp->additionalInfo.daySick = daySick;
+					temp->additionalInfo.daySick = info.daySick;
 					if(p == NULL)
 					{
 						temp->next = NULL;
@@ -267,7 +258,7 @@ void insert(char* tempName, int tempDep, float fever, char* pain, int daySick)
 					p = departments[3].head;
 					q = departments[3].tail;
 					temp->department = tempDep;
-					temp->additionalInfo.daySick = daySick;
+					temp->additionalInfo.daySick = info.daySick;
 					if(p == NULL)
 					{
 						temp->next = NULL;
@@ -416,10 +407,7 @@ void changeDepartment()
 	int x = 0, z = 0;
 	int flag = 0;
 	NODE *p, *q;
-	float fever;
-	int daySick;
-	char pain[20];
-
+	union extra info;
 	while(x == 0)
 	{
 		printf("What is your name?\n");
@@ -450,25 +438,25 @@ void changeDepartment()
 						{
 							case 1:
 								printf("What temperature is your fever?\n");
-								scanf("%f", &fever);
+								scanf("%f", &info.fever);;
 								flag = 1;
 								z = 1;
 								break;
 							case 2:
 								printf("What kind of pain are you experiencing?\n");
-								scanf("%s", pain);
+								scanf("%s", info.pain);
 								flag = 1;
 								z = 1;
 								break;
 							case 3:
 								printf("How many days have you been sick?\n");
-								scanf("%d", &daySick);
+								scanf("%d", &info.daySick);
 								flag = 1;
 								z = 1;
 								break;
 							case 4:
 								printf("How many days have you been sick?\n");
-								scanf("%d", &daySick);
+								scanf("%d", &info.daySick);
 								flag = 1;
 								z = 1;
 								break;
@@ -477,7 +465,7 @@ void changeDepartment()
 
 						}
 					}while(z != 1);
-						insert(tempName, tempDep, fever, pain, daySick);
+						insert(tempName, tempDep, info);;
 						return;
 				}
 
@@ -591,7 +579,7 @@ void deleteAll()
 }
 
 void recursion(NODE *p)
-{
+{;
 	if(p == NULL)
 		return;
 	recursion(p->next);
