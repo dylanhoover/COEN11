@@ -1,3 +1,8 @@
+/*************************************************/
+/*					Dylan Hoover COEN 11 Lab 6           */
+/*							25 October 2018                  */
+/* Writes linked list to a text file             */
+/*************************************************/ 
 #include <stdlib.h>
 #include <stdio.h>
 #include <string.h>
