@@ -253,7 +253,7 @@ void showDepartment()
 	int j = 0;
 	int x = 0;
 	NODE *p;
-	p = head;
+	p = head; //decalre p
 	do
 	{
 		printf("What department would you like to view?\n");
