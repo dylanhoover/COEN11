@@ -104,7 +104,7 @@ void readFile(char *file)
 		return;
 	}
 	fseek(fp, 24, SEEK_SET); //skips the header in the file
-	while(fscanf(fp,"%s %d", tempName, &tempDep) != EOF) //while the file does not reach the end of the file
+	while(fscanf(fp,"%s %d\t", tempName, &tempDep) != EOF) //while the file does not reach the end of the file
 	{
 		if(tempDep == 1)
 		{
@@ -119,6 +119,7 @@ void readFile(char *file)
 			fscanf(fp,"%d\n", &daySick);
 		}
 		insert(tempName, tempDep, fever, pain, daySick);
+		printf("\n");
 	}
 
 	fclose(fp); //close the file

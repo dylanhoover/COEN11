@@ -43,6 +43,7 @@ int saveFile();
 void collectData();
 void deleteAll();
 void changeDepartment();
+void recursion();
 
 int main(int argc, char* argv[])
 {
@@ -70,7 +71,8 @@ int main(int argc, char* argv[])
 				list();
 				break;
 			case 3:
-				delRow();
+				deleteAll();
+			//	delRow();
 				break;
 			case 4:
 				showDepartment();
@@ -581,14 +583,18 @@ void deleteAll()
 	for(i = 0; i < 4; i++) //iterate through array
 	{
 		p=departments[i].head; //set p to head
-		while(p != NULL)
-		{
-			/*goes through the list setting the previous to the next and removes the previous*/
-			q = p->next;
-			free(p);
-			p = q;
-		}
+		recursion(p);
 		departments[i].head = NULL; //NULL the whole array after
+
 	}
+	return;
+}
+
+void recursion(NODE *p)
+{
+	if(p == NULL)
+		return;
+	recursion(p->next);
+	free(p);
 	return;
 }
