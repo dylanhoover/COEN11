@@ -196,87 +196,21 @@ void insert(char* tempName, int tempDep, union extra info)
 	NODE *temp;
 	temp = (NODE*)malloc(sizeof(NODE));
 	strcpy(temp->name, tempName);
-		while(y != 1)
-		{
-			switch(tempDep)
-			{
-				case 1:
-					p = departments[0].head; //set p to the first array
-					q = departments[0].tail; //set q to the first array
-					temp->department = tempDep; //copies department to temp node
-					temp->additionalInfo.fever = info.fever; //copies additional info to temp node
-					if(p == NULL) //if the linked list is empty
-					{
-						temp->next = NULL; //temp next is null
-						departments[0].tail = departments[0].head  = temp; //tail is head and head is temp
-					}
-					else //list has information
-					{
-						temp->next = NULL;
-						q->next = temp; //tail next points to temp
-						q = temp; //tail is equal to temp
-					}
-					y = 1;
-					break;
-				case 2:
-					p = departments[1].head;
-					q = departments[1].tail;
-					temp->department = tempDep;
-					strcpy(temp->additionalInfo.pain, info.pain);
-					if(p == NULL)
-					{
-						temp->next = NULL;
-						departments[1].tail = departments[1].head = temp;
-					}
-					else
-					{
-						temp->next = NULL;
-						q->next = temp;
-						q = temp;
-					}
-					y = 1;
-					break;
-				case 3:
-					p = departments[2].head;
-					q = departments[2].tail;
-					temp->department = tempDep;
-					temp->additionalInfo.daySick = info.daySick;
-					if(p == NULL)
-					{
-						temp->next = NULL;
-						departments[2].tail  = departments[2].head  = temp;
-					}
-					else
-					{
-						temp->next = NULL;
-						q->next = temp;
-						q = temp;
-					}
-					y = 1;
-					break;
-				case 4:
-					p = departments[3].head;
-					q = departments[3].tail;
-					temp->department = tempDep;
-					temp->additionalInfo.daySick = info.daySick;
-					if(p == NULL)
-					{
-						temp->next = NULL;
-						departments[3].tail = departments[3].head = temp;
-					}
-					else
-					{
-						temp->next = NULL;
-						q->next = temp;
-						q = temp;
-					}
-					y = 1;
-					break;
-				default:
-					printf("Not a department");
-			}
-			printf("\n");
-		}
+	temp->department = tempDep; //copies department to temp node
+	temp->additionalInfo = info; //copies additional info to temp node
+	p = departments[tempDep-1].head; //set p to the first array
+	q = departments[tempDep-1].tail; //set q to the first array
+	if(p == NULL) //if the linked list is empty
+	{
+		temp->next = NULL; //temp next is null
+		departments[tempDep-1].tail = departments[tempDep-1].head  = temp; //tail is head and head is temp
+	}
+	else //list has information
+	{
+		temp->next = NULL;
+		q->next = temp; //tail next points to temp
+		q = temp; //tail is equal to temp				
+	}
 	return;
 }
 
@@ -579,7 +513,7 @@ void deleteAll()
 }
 
 void recursion(NODE *p)
-{;
+{
 	if(p == NULL)
 		return;
 	recursion(p->next);
