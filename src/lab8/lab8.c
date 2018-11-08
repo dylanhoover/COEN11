@@ -31,7 +31,7 @@ struct things
 };
 
 struct things departments[4];
-pthread_mutex_t lock;
+pthread_mutex_t mutex;
 
 //declare functions
 void insert(char* tempName, int tempDep, union extra info);
@@ -54,6 +54,8 @@ int main(int argc, char* argv[])
 	int command;
 	int i;
 	pthread_t thread_id;
+    pthread_mutex_init(&mutex, NULL);
+    pthread_create(&thread_id, NULL, autoSave, argv[2]);
 	if(argc == 1)
 	{
 		printf("The name of the file is missing!\n");
@@ -77,8 +79,7 @@ int main(int argc, char* argv[])
 				list();
 				break;
 			case 3:
-				deleteAll();
-			//	delRow();
+				delRow();
 				break;
 			case 4:
 				showDepartment();
@@ -93,7 +94,9 @@ int main(int argc, char* argv[])
 				displaySave(argv[2]);
 				break;
 			case 0:
+                pthread_mutex_lock(&mutex);
 				pthread_cancel(thread_id);
+                pthread_mutex_unlock(&mutex);
 				saveFile(argv[1]);
 				deleteAll();
 				printf("Goodbye\n");
@@ -102,7 +105,7 @@ int main(int argc, char* argv[])
 			default:
 				printf("Error, you have selected a non-existant option.\n");
 		}
-		pthread_create(&thread_id, NULL, autoSave, argv[2]);
+		
 	}while(command !=0); //when 0 is pressed the do loop exits
 	return 0;
 }
@@ -210,7 +213,7 @@ void insert(char* tempName, int tempDep, union extra info)
 	temp->additionalInfo = info; //copies additional info to temp node
 	p = departments[tempDep-1].head; //set p to the first array
 	q = departments[tempDep-1].tail; //set q to the first array
-	pthread_mutex_lock(&lock);
+	pthread_mutex_lock(&mutex);
 	if(p == NULL) //if the linked list is empty
 	{
 		temp->next = NULL; //temp next is null
@@ -222,7 +225,7 @@ void insert(char* tempName, int tempDep, union extra info)
 		q->next = temp; //tail next points to temp
 		q = temp; //tail is equal to temp				
 	}
-	pthread_mutex_unlock(&lock);
+	pthread_mutex_unlock(&mutex);
 	return;
 }
 
@@ -279,7 +282,7 @@ void delRow()
 	NODE *p, *q;
 	while(x != 1)
 	{
-		pthread_mutex_lock(&lock);
+		pthread_mutex_lock(&mutex);
 		printf("Which department would you like to delete from?\n");
 		scanf("%d", &cmd);
 		if(cmd == 1 || cmd == 2 || cmd == 3 || cmd == 4)
@@ -304,7 +307,7 @@ void delRow()
 			}
 				x = 1;
 		}
-		pthread_mutex_unlock(&lock);
+		pthread_mutex_unlock(&mutex);
 	}
 	return;
 }
@@ -358,7 +361,6 @@ void changeDepartment()
 	union extra info;
 	while(x == 0)
 	{
-		pthread_mutex_lock(&lock);
 		printf("What is your name?\n");
 		scanf("%s", tempName);
 		for(i = 0; i < 4; i++)
@@ -428,7 +430,6 @@ void changeDepartment()
 		{
 			printf("Name not in list.\n");
 		}
-		pthread_mutex_unlock(&lock);
 	}
 	return;
 }
@@ -520,9 +521,9 @@ void *autoSave(char *file)
 	NODE *p;
 	FILE *ofp; //file pointer
 	int i;
-	while(1)
+	while(1) //infinite while loop so the thread function is always running
 	{
-		pthread_mutex_lock(&lock);
+		pthread_mutex_lock(&mutex); //always lock when editing the list and reading from the list
 		ofp = fopen(file, "wb"); //set file pointer to file name specified
 		for(i = 0; i < 4; i++) //iterate through the array
 		{
@@ -534,8 +535,10 @@ void *autoSave(char *file)
 			}
 		}
 		fclose(ofp); //close file
-		pthread_mutex_unlock(&lock);
+		pthread_mutex_unlock(&mutex);
+        printf("Sleeping\n");
 		sleep(15);
+        printf("waking up\n");
 	}
 
 }
@@ -579,7 +582,7 @@ void deleteAll()
 	for(i = 0; i < 4; i++) //iterate through array
 	{
 		p=departments[i].head; //set p to head
-		recursion(p);
+		recursion(p); //pass pointer to recursion
 		departments[i].head = NULL; //NULL the whole array after
 
 	}
@@ -588,9 +591,9 @@ void deleteAll()
 
 void recursion(NODE *p)
 {
-	if(p == NULL)
+	if(p == NULL) //if the pointer is null
 		return;
-	recursion(p->next);
-	free(p);
+	recursion(p->next); //pass the arrow to the next node
+	free(p); //free the node
 	return;
 }
